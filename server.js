@@ -4,7 +4,6 @@ const fetch = require("node-fetch");
 const app = express();
 app.use(express.json());
 
-// Simple service reference (kept clean, no duplication)
 const SERVICES = `
 Teeth Cleaning: bleeding gums, bad breath, yellow teeth, gum inflammation (2000-5000 KES)
 Tooth Extraction: broken tooth, severe pain, swelling, tooth decay (3000-8000 KES)
@@ -31,53 +30,43 @@ app.post("/analyze", async (req, res) => {
             content: `
 You are a dental triage classifier for Smile Avenue Dental Centre in Nairobi.
 
-You are NOT allowed to say "unable to classify" unless the message has absolutely no dental meaning.
+You must always match user symptoms to ONE service below.
 
-You MUST ALWAYS choose ONE of the services below.
-
-SERVICES (STRICT CLASSIFICATION):
-
-1. TEETH_CLEANING
-- bleeding gums
-- bad breath
-- yellow teeth
-- gum inflammation
-
-2. TOOTH_EXTRACTION
-- broken tooth
-- severe pain
-- swelling
-- tooth decay
-- tooth knocked out
-
-3. FILLING
-- cavities
-- small holes in teeth
-- mild pain when chewing
-
-4. ROOT_CANAL
-- deep tooth pain
-- hot/cold sensitivity
-- severe tooth ache
-- nerve pain
-
-5. BRACES
-- crooked teeth
-- alignment issues
-- spacing problems
+SERVICES:
+${SERVICES}
 
 RULES:
-- Always select ONE category above
-- If multiple match, choose the strongest pain-related one
-- NEVER return "unable to classify"
-- NEVER return free text explanations
-- Output must be strict JSON:
+- Always pick ONE service
+- Never say "unable to classify"
+- Return ONLY JSON
 
+FORMAT:
 {
-  "issue": "ONE_SERVICE_NAME",
-  "treatment": "SERVICE_NAME",
+  "issue": "",
+  "treatment": "",
   "price": ""
 }
+            `
+          },
+          {
+            role: "user",
+            content: userMessage
+          }
+        ]
+      })
+    });
+
+    const data = await response.json();
+
+    let result;
+
+    try {
+      result = JSON.parse(data.choices[0].message.content);
+    } catch (e) {
+      result = {
+        issue: "Unknown",
+        treatment: "Consultation",
+        price: "Varies"
       };
     }
 
