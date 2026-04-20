@@ -29,43 +29,55 @@ app.post("/analyze", async (req, res) => {
           {
             role: "system",
             content: `
-You are a dental triage assistant for Smile Avenue Dental Centre in Nairobi.
+You are a dental triage classifier for Smile Avenue Dental Centre in Nairobi.
 
-Your job:
-- Match symptoms to ONE service below
-- Never say "consult dentist" unless no match exists
-- Return ONLY valid JSON
+You are NOT allowed to say "unable to classify" unless the message has absolutely no dental meaning.
 
-SERVICES:
-${SERVICES}
+You MUST ALWAYS choose ONE of the services below.
 
-OUTPUT FORMAT:
+SERVICES (STRICT CLASSIFICATION):
+
+1. TEETH_CLEANING
+- bleeding gums
+- bad breath
+- yellow teeth
+- gum inflammation
+
+2. TOOTH_EXTRACTION
+- broken tooth
+- severe pain
+- swelling
+- tooth decay
+- tooth knocked out
+
+3. FILLING
+- cavities
+- small holes in teeth
+- mild pain when chewing
+
+4. ROOT_CANAL
+- deep tooth pain
+- hot/cold sensitivity
+- severe tooth ache
+- nerve pain
+
+5. BRACES
+- crooked teeth
+- alignment issues
+- spacing problems
+
+RULES:
+- Always select ONE category above
+- If multiple match, choose the strongest pain-related one
+- NEVER return "unable to classify"
+- NEVER return free text explanations
+- Output must be strict JSON:
+
 {
-  "issue": "",
-  "treatment": "",
+  "issue": "ONE_SERVICE_NAME",
+  "treatment": "SERVICE_NAME",
   "price": ""
 }
-`
-          },
-          {
-            role: "user",
-            content: userMessage
-          }
-        ]
-      })
-    });
-
-    const data = await response.json();
-
-    let result;
-
-    try {
-      result = JSON.parse(data.choices[0].message.content);
-    } catch (e) {
-      result = {
-        issue: "Unable to classify",
-        treatment: "Consultation",
-        price: "Varies"
       };
     }
 
