@@ -82,7 +82,71 @@ function classify(message) {
     price: "Varies"
   };
 }
+function classify(message) {
+  const text = message.toLowerCase();
 
+  // Teeth Cleaning (Gums issues)
+  if (
+    /bleed|blood|gum|bad breath|smell|yellow|stain/.test(text)
+  ) {
+    return {
+      issue: "Gum inflammation (Gingivitis)",
+      treatment: "Teeth Cleaning (Scaling & Polishing)",
+      price: "2000-5000 KES"
+    };
+  }
+
+  // Extraction (serious damage)
+  if (
+    /broken|crack|fell out|loose|severe pain|swelling|injury|accident/.test(text)
+  ) {
+    return {
+      issue: "Tooth damage or infection",
+      treatment: "Tooth Extraction",
+      price: "3000-8000 KES"
+    };
+  }
+
+  // Filling (cavities)
+  if (
+    /cavity|hole|decay|black spot|food stuck|small pain/.test(text)
+  ) {
+    return {
+      issue: "Tooth cavity",
+      treatment: "Dental Filling",
+      price: "2500-6000 KES"
+    };
+  }
+
+  // Root Canal (nerve pain)
+  if (
+    /deep pain|sharp pain|throbbing|sensitive|sensitivity|hot|cold|pain when drinking/.test(text)
+  ) {
+    return {
+      issue: "Tooth nerve damage",
+      treatment: "Root Canal Treatment",
+      price: "10000-25000 KES"
+    };
+  }
+
+  // Braces
+  if (
+    /crooked|alignment|spacing|not straight|overlap/.test(text)
+  ) {
+    return {
+      issue: "Teeth alignment issue",
+      treatment: "Braces",
+      price: "80000-150000 KES"
+    };
+  }
+
+  // fallback
+  return {
+    issue: "General dental issue",
+    treatment: "Consultation",
+    price: "Varies"
+  };
+}
 // ✅ MAIN API
 app.post("/analyze", (req, res) => {
   try {
