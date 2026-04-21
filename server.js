@@ -1,74 +1,94 @@
 const express = require("express");
-const fetch = require("node-fetch");
-
 const app = express();
+
 app.use(express.json());
 
-const SERVICES = `
-Teeth Cleaning: bleeding gums, bad breath, yellow teeth, gum inflammation (2000-5000 KES)
-Tooth Extraction: broken tooth, severe pain, swelling, tooth decay (3000-8000 KES)
-Filling: cavities, small holes, mild pain when eating (2500-6000 KES)
-Root Canal: deep pain, hot/cold sensitivity, severe tooth ache (10000-25000 KES)
-Braces: crooked teeth, alignment issues (80000-150000 KES)
-`;
+// ✅ RULE-BASED CLASSIFIER (NO AI DEPENDENCE)
+function classify(message) {
+  const text = message.toLowerCase();
 
-app.post("/analyze", async (req, res) => {
-  try {
-    const userMessage = req.body.message;
+  // Teeth Cleaning
+  if (
+    text.includes("bleed") ||
+    text.includes("gum") ||
+    text.includes("bad breath") ||
+    text.includes("yellow")
+  ) {
+    return {
+      issue: "Gum inflammation (Gingivitis)",
+      treatment: "Teeth Cleaning (Scaling & Polishing)",
+      price: "2000-5000 KES"
+    };
+  }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: `
-You are a dental triage classifier for Smile Avenue Dental Centre in Nairobi.
+  // Extraction
+  if (
+    text.includes("broken") ||
+    text.includes("severe pain") ||
+    text.includes("swelling") ||
+    text.includes("tooth broke")
+  ) {
+    return {
+      issue: "Tooth damage or infection",
+      treatment: "Tooth Extraction",
+      price: "3000-8000 KES"
+    };
+  }
 
-You must always match user symptoms to ONE service below.
+  // Filling
+  if (
+    text.includes("cavity") ||
+    text.includes("hole") ||
+    text.includes("mild pain")
+  ) {
+    return {
+      issue: "Tooth cavity",
+      treatment: "Dental Filling",
+      price: "2500-6000 KES"
+    };
+  }
 
-SERVICES:
-${SERVICES}
+  // Root Canal
+  if (
+    text.includes("deep pain") ||
+    text.includes("sensitivity") ||
+    text.includes("hot") ||
+    text.includes("cold")
+  ) {
+    return {
+      issue: "Tooth nerve damage",
+      treatment: "Root Canal Treatment",
+      price: "10000-25000 KES"
+    };
+  }
 
-RULES:
-- Always pick ONE service
-- Never say "unable to classify"
-- Return ONLY JSON
+  // Braces
+  if (
+    text.includes("crooked") ||
+    text.includes("alignment") ||
+    text.includes("spacing")
+  ) {
+    return {
+      issue: "Teeth alignment issue",
+      treatment: "Braces",
+      price: "80000-150000 KES"
+    };
+  }
 
-FORMAT:
-{
-  "issue": "",
-  "treatment": "",
-  "price": ""
+  // Default fallback (rare)
+  return {
+    issue: "General dental issue",
+    treatment: "Consultation",
+    price: "Varies"
+  };
 }
-            `
-          },
-          {
-            role: "user",
-            content: userMessage
-          }
-        ]
-      })
-    });
 
-    const data = await response.json();
+// ✅ MAIN API
+app.post("/analyze", (req, res) => {
+  try {
+    const message = req.body.message || "";
 
-    let result;
-
-    try {
-      result = JSON.parse(data.choices[0].message.content);
-    } catch (e) {
-      result = {
-        issue: "Unknown",
-        treatment: "Consultation",
-        price: "Varies"
-      };
-    }
+    const result = classify(message);
 
     const whatsapp = `https://wa.me/2547XXXXXXXXX?text=Hi, I have ${result.issue} and need ${result.treatment}`;
 
@@ -87,4 +107,6 @@ FORMAT:
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => console.log("Server running on port " + PORT));
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
+});
