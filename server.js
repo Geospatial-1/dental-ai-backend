@@ -126,7 +126,20 @@ My estimated budget is ${result.price}.
 How soon can I get assistance?`
     );
 
-    const whatsapp = `https://wa.me/2547XXXXXXXXX?text=${whatsappMessage}`;
+    let whatsapp = null;
+
+// Only allow serious leads
+if (result.urgency === "high" || result.confidence >= 0.85) {
+
+  const whatsappMessage = encodeURIComponent(
+    `Hello, I have been experiencing: ${result.issue}.
+I would like ${result.treatment}.
+My budget is ${result.price}.
+When can I come in?`
+  );
+
+  whatsapp = `https://wa.me/2547XXXXXXXXX?text=${whatsappMessage}`;
+}}`;
 
     res.json({
       ...result,
