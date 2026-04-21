@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smile Avenue Dental Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f1f1f1;
+      border-radius: 8px;
+    }
+
+    .urgent {
+      color: red;
+      font-weight: bold;
+    }
+
+    .medium {
+      color: orange;
+    }
+
+    .low {
+      color: green;
+    }
+
+    .whatsapp-btn {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      padding: 12px;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Dental Assistant</h2>
+
+  <p>Describe your dental problem:</p>
+  <textarea id="message" placeholder="e.g. My gums bleed when brushing"></textarea>
+
+  <button onclick="analyze()">Check Problem</button>
+
+  <div id="loading" class="hidden">Analyzing...</div>
+
+  <div id="result" class="result hidden">
+    <p><strong>Issue:</strong> <span id="issue"></span></p>
+    <p><strong>Treatment:</strong> <span id="treatment"></span></p>
+    <p><strong>Estimated Cost:</strong> <span id="price"></span></p>
+    <p><strong>Urgency:</strong> <span id="urgency"></span></p>
+
+    <a id="whatsappBtn" class="whatsapp-btn hidden" target="_blank">
+      Continue on WhatsApp
+    </a>
+  </div>
+</div>
+
+<script>
+async function analyze() {
+  const message = document.getElementById("message").value;
+
+  if (!message) {
+    alert("Please describe your problem");
+    return;
+  }
+
+  document.getElementById("loading").classList.remove("hidden");
+  document.getElementById("result").classList.add("hidden");
+
+  try {
+    const res = await fetch("https://dental-ai-backend-n0ua.onrender.com/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message })
+    });
+
+    const data = await res.json();
+
+    document.getElementById("issue").innerText = data.issue;
+    document.getElementById("treatment").innerText = data.treatment;
+    document.getElementById("price").innerText = data.price;
+
+    const urgencyEl = document.getElementById("urgency");
+    urgencyEl.innerText = data.urgency;
+    urgencyEl.className = data.urgency;
+
+    const whatsappBtn = document.getElementById("whatsappBtn");
+
+    if (data.whatsapp) {
+      whatsappBtn.href = data.whatsapp;
+      whatsappBtn.classList.remove("hidden");
+    } else {
+      whatsappBtn.classList.add("hidden");
+    }
+
+    document.getElementById("result").classList.remove("hidden");
+
+  } catch (err) {
+    alert("Error connecting to server");
+  }
+
+  document.getElementById("loading").classList.add("hidden");
+}
+</script>
+
+</body>
+</html>
