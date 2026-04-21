@@ -7,7 +7,6 @@ app.use(express.json());
 function classify(message) {
   const text = message.toLowerCase();
 
-  // Cleaning / Gum issues
   if (/bleed|blood|gum|bad breath|smell|yellow|stain/.test(text)) {
     return {
       issue: "Gum Disease (Gingivitis)",
@@ -18,7 +17,6 @@ function classify(message) {
     };
   }
 
-  // Extraction / Trauma
   if (/broken|crack|fell out|loose|severe pain|swelling|injury|accident/.test(text)) {
     return {
       issue: "Tooth Damage or Infection",
@@ -29,7 +27,6 @@ function classify(message) {
     };
   }
 
-  // Cavities
   if (/cavity|hole|decay|black spot|food stuck/.test(text)) {
     return {
       issue: "Tooth Decay (Cavity)",
@@ -40,7 +37,6 @@ function classify(message) {
     };
   }
 
-  // Root canal / nerve pain
   if (/deep pain|sharp pain|throbbing|sensitive|hot|cold|pain when drinking/.test(text)) {
     return {
       issue: "Tooth Nerve Damage",
@@ -51,7 +47,6 @@ function classify(message) {
     };
   }
 
-  // Braces / alignment
   if (/crooked|alignment|spacing|not straight|overlap/.test(text)) {
     return {
       issue: "Teeth Misalignment",
@@ -62,7 +57,6 @@ function classify(message) {
     };
   }
 
-  // Whitening
   if (/whiten|white teeth|stains|discolor/.test(text)) {
     return {
       issue: "Teeth Discoloration",
@@ -73,7 +67,6 @@ function classify(message) {
     };
   }
 
-  // Dentures
   if (/missing teeth|lost teeth|no teeth/.test(text)) {
     return {
       issue: "Missing Teeth",
@@ -84,7 +77,6 @@ function classify(message) {
     };
   }
 
-  // Crown / cap
   if (/cap|crown|cover tooth/.test(text)) {
     return {
       issue: "Tooth Structural Damage",
@@ -95,7 +87,6 @@ function classify(message) {
     };
   }
 
-  // Default fallback
   return {
     issue: "General Dental Consultation Needed",
     treatment: "Dental Consultation",
@@ -118,28 +109,20 @@ app.post("/analyze", (req, res) => {
 
     const result = classify(message);
 
-    // 🔥 SMART WHATSAPP CONVERSION MESSAGE
-    const whatsappMessage = encodeURIComponent(
-      `Hello, I have been experiencing: ${result.issue}. 
-I would like ${result.treatment}. 
-My estimated budget is ${result.price}. 
-How soon can I get assistance?`
-    );
-
     let whatsapp = null;
 
-// Only allow serious leads
-if (result.urgency === "high" || result.confidence >= 0.85) {
+    // 🔥 ONLY SERIOUS LEADS
+    if (result.urgency === "high" || result.confidence >= 0.85) {
 
-  const whatsappMessage = encodeURIComponent(
-    `Hello, I have been experiencing: ${result.issue}.
+      const whatsappMessage = encodeURIComponent(
+        `Hello, I have been experiencing: ${result.issue}.
 I would like ${result.treatment}.
 My budget is ${result.price}.
 When can I come in?`
-  );
+      );
 
-  whatsapp = `https://wa.me/2547XXXXXXXXX?text=${whatsappMessage}`;
-}}`;
+      whatsapp = `https://wa.me/2547XXXXXXXXX?text=${whatsappMessage}`;
+    }
 
     res.json({
       ...result,
