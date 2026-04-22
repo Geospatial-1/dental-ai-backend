@@ -2,30 +2,45 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 
-// ✅ CORS Configuration for GitHub Pages
-const corsOptions = {
-  origin: [
-    'https://*.github.io',
-    'http://localhost:3000',
-    'http://127.0.0.1:5500',
-    'http://localhost:5500',
-    'https://supreme-smiles-avenue.netlify.app' // Add your custom domain if any
-  ],
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  optionsSuccessStatus: 200
-};
+// ✅ COMPREHENSIVE CORS CONFIGURATION
+app.use((req, res, next) => {
+  // Allow all origins for testing (you can restrict this later)
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  // Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
-app.use(cors(corsOptions));
+// Also use the cors middleware as backup
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
-// ✅ Pre-flight requests handling
-app.options('*', cors(corsOptions));
+// ✅ ROOT ENDPOINT - Test if server is reachable
+app.get("/", (req, res) => {
+  res.json({
+    status: "online",
+    message: "Supreme Smiles Avenue Dental API is running",
+    endpoints: {
+      health: "/health",
+      analyze: "/analyze (POST)",
+      services: "/services"
+    },
+    timestamp: new Date().toISOString()
+  });
+});
 
 // ✅ Enhanced Services Catalog
 const SERVICES = {
-  // Emergency Services
   EMERGENCY_EXTRACTION: {
     issue: "Emergency Tooth Extraction",
     treatment: "Emergency Extraction",
@@ -69,14 +84,6 @@ const SERVICES = {
     urgency: "medium"
   },
   
-  BRIDGE: {
-    issue: "Dental Bridge",
-    treatment: "Fixed Bridge",
-    priceRange: { min: 35000, max: 85000 },
-    priceDisplay: "35,000 - 85,000 KES",
-    urgency: "medium"
-  },
-  
   VENEERS: {
     issue: "Cosmetic Veneers",
     treatment: "Porcelain Veneers",
@@ -101,22 +108,12 @@ const SERVICES = {
     urgency: "low"
   },
   
-  BRACES_METAL: {
+  BRACES: {
     issue: "Orthodontic Treatment",
     treatment: "Metal Braces",
     priceRange: { min: 80000, max: 180000 },
     priceDisplay: "80,000 - 180,000 KES",
-    urgency: "low",
-    duration: "18-24 months"
-  },
-  
-  INVISALIGN: {
-    issue: "Orthodontic Treatment",
-    treatment: "Invisalign Clear Aligners",
-    priceRange: { min: 180000, max: 350000 },
-    priceDisplay: "180,000 - 350,000 KES",
-    urgency: "low",
-    duration: "12-18 months"
+    urgency: "low"
   },
   
   WISDOM_TOOTH: {
@@ -172,9 +169,9 @@ function classify(message) {
     return { ...SERVICES.DENTAL_IMPLANT, confidence: 0.88 };
   }
   
-  // Crown/Bridge
-  if (/crown|cap|cover|bridge/.test(text)) {
-    return /bridge/.test(text) ? { ...SERVICES.BRIDGE, confidence: 0.85 } : { ...SERVICES.CROWN, confidence: 0.85 };
+  // Crown
+  if (/crown|cap|cover/.test(text)) {
+    return { ...SERVICES.CROWN, confidence: 0.85 };
   }
   
   // Veneers
@@ -198,8 +195,8 @@ function classify(message) {
   }
   
   // Braces
-  if (/brace|invisalign|crooked|straighten|gap/.test(text)) {
-    return /invisalign/.test(text) ? { ...SERVICES.INVISALIGN, confidence: 0.88 } : { ...SERVICES.BRACES_METAL, confidence: 0.88 };
+  if (/brace|crooked|straighten|gap/.test(text)) {
+    return { ...SERVICES.BRACES, confidence: 0.88 };
   }
   
   return { ...SERVICES.CONSULTATION, confidence: 0.6 };
@@ -210,31 +207,31 @@ function calculateClientScore(message, result, insurance, budget) {
   let score = 0;
   const text = message.toLowerCase();
   
-  // Message detail (10 points)
+  // Message detail
   if (message.length > 50) score += 5;
   if (message.length > 100) score += 5;
   
-  // Symptoms count (20 points max)
+  // Symptoms count
   const symptomCount = (message.match(/pain|hurt|ache|bleed|swollen|broken|crack/g) || []).length;
   score += Math.min(symptomCount * 5, 20);
   
-  // Duration mentioned (10 points)
+  // Duration mentioned
   if (/days|weeks|months|years|since/.test(text)) score += 10;
   
-  // Previous treatment (15 points)
+  // Previous treatment
   if (/tried|took|used|before|previous/.test(text)) score += 15;
   
-  // Urgency (20 points)
+  // Urgency
   if (/urgent|emergency|immediate|asap|today/.test(text)) score += 20;
   else if (/next week|this week|soon/.test(text)) score += 10;
   
-  // Insurance (15 points)
-  if (insurance && insurance !== "none") score += 15;
+  // Insurance
+  if (insurance && insurance !== "No insurance mentioned") score += 15;
   
-  // Budget (10 points)
+  // Budget
   if (budget || /cost|price|how much|budget/.test(text)) score += 10;
   
-  // High-value procedure (15 points)
+  // High-value procedure
   if (/implant|brace|invisalign|veneer|crown/.test(text)) score += 15;
   
   // Urgency from classification
@@ -245,7 +242,7 @@ function calculateClientScore(message, result, insurance, budget) {
   return {
     score,
     maxScore: 150,
-    percentage: (score / 150) * 100,
+    percentage: Math.round((score / 150) * 100),
     isQualified: score >= 40
   };
 }
@@ -292,9 +289,11 @@ function generateWhatsAppMessage(message, result, insurance, budget, score) {
   return encodeURIComponent(text);
 }
 
-// ✅ Main Analysis Endpoint
+// ✅ MAIN ANALYSIS ENDPOINT
 app.post("/analyze", (req, res) => {
   try {
+    console.log("Received analysis request:", req.body);
+    
     const { message } = req.body;
     
     if (!message || message.trim().length < 3) {
@@ -308,46 +307,59 @@ app.post("/analyze", (req, res) => {
     const budget = extractBudget(message);
     const clientScore = calculateClientScore(message, result, insurance, budget);
     
+    // Generate WhatsApp link with YOUR ACTUAL NUMBER
     let whatsapp = null;
     if (clientScore.isQualified) {
       const whatsappMessage = generateWhatsAppMessage(message, result, insurance, budget, clientScore);
-      // Replace with your actual WhatsApp number
-      whatsapp = `https://wa.me/254712345678?text=${whatsappMessage}`;
+      // REPLACE WITH YOUR ACTUAL WHATSAPP NUMBER (include country code, no + or spaces)
+      const WHATSAPP_NUMBER = "254712345678"; // CHANGE THIS!
+      whatsapp = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
     }
     
-    res.json({
+    const response = {
       ...result,
       insurance,
       budget,
       clientScore: {
         score: clientScore.score,
-        percentage: Math.round(clientScore.percentage),
+        percentage: clientScore.percentage,
         isQualified: clientScore.isQualified
       },
       whatsapp,
       timestamp: new Date().toISOString()
-    });
+    };
+    
+    console.log("Sending response:", response);
+    res.json(response);
     
   } catch (error) {
     console.error("Analysis error:", error);
     res.status(500).json({
       error: "Unable to process request",
-      message: "Please try again"
+      message: "Please try again",
+      issue: "General Consultation",
+      treatment: "Dental Examination",
+      priceDisplay: "1,000 - 3,000 KES",
+      urgency: "low",
+      insurance: "Not specified",
+      clientScore: { percentage: 50, isQualified: false },
+      whatsapp: null
     });
   }
 });
 
-// ✅ Health Check Endpoint
+// ✅ HEALTH CHECK ENDPOINT
 app.get("/health", (req, res) => {
   res.json({
     status: "healthy",
     clinic: "Supreme Smiles Avenue Dental Centre",
     version: "2.0.0",
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    cors: "enabled"
   });
 });
 
-// ✅ Get Services Endpoint
+// ✅ GET SERVICES ENDPOINT
 app.get("/services", (req, res) => {
   res.json({
     clinic: "Supreme Smiles Avenue Dental Centre",
@@ -356,7 +368,8 @@ app.get("/services", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🦷 Supreme Smiles Avenue Server running on port ${PORT}`);
-  console.log(`✅ CORS enabled for GitHub Pages and local development`);
+  console.log(`✅ CORS enabled for all origins`);
+  console.log(`📍 Test the API at: http://localhost:${PORT}/health`);
 });
