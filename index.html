@@ -4,11 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Supreme Smiles Avenue - Premium Dental Care</title>
-  
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
@@ -22,7 +18,34 @@
       font-family: 'Poppins', sans-serif;
       line-height: 1.6;
       color: #333;
-      overflow-x: hidden;
+    }
+
+    /* Connection Status Banner */
+    .connection-status {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      padding: 10px;
+      text-align: center;
+      font-weight: 500;
+      z-index: 999;
+      transition: all 0.3s;
+    }
+
+    .status-online {
+      background: #2ed573;
+      color: white;
+    }
+
+    .status-offline {
+      background: #ff4757;
+      color: white;
+    }
+
+    .status-checking {
+      background: #ffa502;
+      color: white;
     }
 
     /* Header */
@@ -54,34 +77,6 @@
       gap: 10px;
     }
 
-    .logo i {
-      font-size: 2rem;
-    }
-
-    .nav-menu {
-      display: flex;
-      list-style: none;
-      gap: 2rem;
-    }
-
-    .nav-menu a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s;
-    }
-
-    .nav-menu a:hover {
-      color: #ffd700;
-    }
-
-    .emergency-btn {
-      background: #ff4757;
-      padding: 0.5rem 1.5rem;
-      border-radius: 50px;
-      font-weight: 600;
-    }
-
     /* Hero Section */
     .hero {
       background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1200') center/cover;
@@ -102,13 +97,6 @@
     .hero h1 {
       font-size: 3.5rem;
       margin-bottom: 1rem;
-      animation: fadeInUp 1s;
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-      animation: fadeInUp 1s 0.2s backwards;
     }
 
     .cta-button {
@@ -121,68 +109,9 @@
       font-weight: 600;
       font-size: 1.1rem;
       transition: all 0.3s;
-      animation: fadeInUp 1s 0.4s backwards;
     }
 
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
-    }
-
-    /* Services Section */
-    .services {
-      padding: 5rem 2rem;
-      background: #f8f9fa;
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 3rem;
-      color: #333;
-    }
-
-    .services-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-    }
-
-    .service-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 15px;
-      text-align: center;
-      transition: all 0.3s;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
-
-    .service-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-    }
-
-    .service-card i {
-      font-size: 3rem;
-      color: #764ba2;
-      margin-bottom: 1rem;
-    }
-
-    .service-card h3 {
-      margin-bottom: 1rem;
-      color: #333;
-    }
-
-    .service-card .price {
-      color: #764ba2;
-      font-weight: 600;
-      margin-top: 1rem;
-      font-size: 1.1rem;
-    }
-
-    /* Assessment Tool Section */
+    /* Assessment Section */
     .assessment {
       padding: 5rem 2rem;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -199,12 +128,6 @@
       padding: 3rem;
       border-radius: 20px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-      color: #333;
-    }
-
-    .assessment-box h2 {
-      text-align: center;
-      margin-bottom: 2rem;
       color: #333;
     }
 
@@ -226,12 +149,6 @@
       font-family: 'Poppins', sans-serif;
       resize: vertical;
       min-height: 120px;
-      transition: border-color 0.3s;
-    }
-
-    .input-group textarea:focus {
-      outline: none;
-      border-color: #764ba2;
     }
 
     .analyze-btn {
@@ -244,12 +161,11 @@
       font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s;
     }
 
-    .analyze-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    .analyze-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .result-card {
@@ -262,7 +178,6 @@
 
     .result-card.show {
       display: block;
-      animation: slideIn 0.5s;
     }
 
     .result-item {
@@ -270,10 +185,6 @@
       justify-content: space-between;
       padding: 0.75rem 0;
       border-bottom: 1px solid #e0e0e0;
-    }
-
-    .result-item:last-child {
-      border-bottom: none;
     }
 
     .urgency-badge {
@@ -298,12 +209,6 @@
       text-decoration: none;
       border-radius: 10px;
       font-weight: 600;
-      transition: all 0.3s;
-    }
-
-    .whatsapp-link:hover {
-      background: #20bd5a;
-      transform: translateY(-2px);
     }
 
     .loading {
@@ -326,322 +231,61 @@
       margin: 0 auto;
     }
 
-    /* About Section */
-    .about {
-      padding: 5rem 2rem;
-      background: white;
-    }
-
-    .about-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .about-content h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1.5rem;
-      color: #333;
-    }
-
-    .about-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #764ba2;
-    }
-
-    /* Team Section */
-    .team {
-      padding: 5rem 2rem;
-      background: #f8f9fa;
-    }
-
-    .team-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-
-    .team-card {
-      background: white;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-      transition: all 0.3s;
-    }
-
-    .team-card:hover {
-      transform: translateY(-10px);
-    }
-
-    .team-image {
-      width: 100%;
-      height: 250px;
-      background: #e0e0e0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .team-image i {
-      font-size: 5rem;
-      color: #764ba2;
-    }
-
-    .team-info {
-      padding: 1.5rem;
-      text-align: center;
-    }
-
-    /* Testimonials */
-    .testimonials {
-      padding: 5rem 2rem;
-      background: white;
-    }
-
-    .testimonials-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
-    .testimonial-card {
-      background: #f8f9fa;
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
-
-    .testimonial-text {
-      font-style: italic;
-      margin-bottom: 1rem;
-    }
-
-    .testimonial-author {
-      font-weight: 600;
-      color: #764ba2;
-    }
-
-    .rating {
-      color: #ffd700;
-      margin-bottom: 1rem;
-    }
-
-    /* Contact Section */
-    .contact {
-      padding: 5rem 2rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-
-    .contact-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-    }
-
-    .contact-info i {
-      margin-right: 1rem;
-      font-size: 1.2rem;
-    }
-
-    .contact-item {
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-    }
-
-    .map-placeholder {
-      background: rgba(255,255,255,0.1);
-      height: 300px;
-      border-radius: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Footer */
-    .footer {
-      background: #333;
-      color: white;
-      padding: 3rem 2rem 1rem;
-    }
-
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-
-    .footer-section h3 {
-      margin-bottom: 1rem;
-    }
-
-    .footer-section ul {
-      list-style: none;
-    }
-
-    .footer-section ul li {
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-section a {
-      color: white;
-      text-decoration: none;
-    }
-
-    .social-links {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .social-links a {
-      width: 40px;
-      height: 40px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-    }
-
-    .social-links a:hover {
-      background: #764ba2;
-      transform: translateY(-3px);
-    }
-
-    .footer-bottom {
-      text-align: center;
-      padding-top: 2rem;
-      margin-top: 2rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-
-    /* Animations */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
 
-    /* Mobile Menu */
-    .mobile-menu-btn {
+    .debug-info {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f1f1f1;
+      border-radius: 5px;
+      font-size: 0.9rem;
       display: none;
-      font-size: 1.5rem;
-      cursor: pointer;
+    }
+
+    .debug-info.show {
+      display: block;
+    }
+
+    .direct-whatsapp-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 500;
+    }
+
+    .error-message {
+      background: #ff4757;
+      color: white;
+      padding: 1rem;
+      border-radius: 5px;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
     }
 
     @media (max-width: 768px) {
-      .mobile-menu-btn {
-        display: block;
-      }
-
-      .nav-menu {
-        display: none;
-        position: absolute;
-        top: 70px;
-        left: 0;
-        right: 0;
-        background: #764ba2;
-        flex-direction: column;
-        padding: 1rem;
-        text-align: center;
-      }
-
-      .nav-menu.active {
-        display: flex;
-      }
-
       .hero h1 {
         font-size: 2.5rem;
       }
-
-      .about-container,
-      .contact-container {
-        grid-template-columns: 1fr;
-      }
-
-      .section-title {
-        font-size: 2rem;
-      }
-    }
-
-    /* Insurance Badge */
-    .insurance-badge {
-      display: inline-block;
-      background: #e0e0e0;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-    }
-
-    /* Qualification Badge */
-    .qualification-badge {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-
-    .qualified {
-      background: #2ed573;
-      color: white;
-    }
-
-    .not-qualified {
-      background: #ffa502;
-      color: white;
     }
   </style>
 </head>
 <body>
+  <!-- Connection Status Banner -->
+  <div id="connectionStatus" class="connection-status status-checking">
+    <i class="fas fa-sync-alt fa-spin"></i> Checking connection...
+  </div>
+
   <!-- Header -->
   <header class="header">
     <nav class="nav-container">
@@ -649,88 +293,42 @@
         <i class="fas fa-tooth"></i>
         Supreme Smiles Avenue
       </div>
-      <div class="mobile-menu-btn" onclick="toggleMenu()">
-        <i class="fas fa-bars"></i>
+      <div>
+        <a href="tel:+254712345678" style="color: white; text-decoration: none;">
+          <i class="fas fa-phone"></i> Emergency: +254 712 345 678
+        </a>
       </div>
-      <ul class="nav-menu" id="navMenu">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#assessment">Assessment</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#team">Our Team</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="tel:+254712345678" class="emergency-btn"><i class="fas fa-phone"></i> Emergency</a></li>
-      </ul>
     </nav>
   </header>
 
   <!-- Hero Section -->
-  <section id="home" class="hero">
+  <section class="hero">
     <div class="hero-content">
       <h1>Your Smile, Our Passion</h1>
-      <p>Experience world-class dental care with cutting-edge technology and a gentle touch. We make every smile beautiful and healthy.</p>
+      <p style="font-size: 1.2rem; margin-bottom: 2rem;">Experience world-class dental care with cutting-edge technology</p>
       <a href="#assessment" class="cta-button">Start Free Assessment</a>
     </div>
   </section>
 
-  <!-- Services Section -->
-  <section id="services" class="services">
-    <h2 class="section-title">Our Premium Services</h2>
-    <div class="services-grid">
-      <div class="service-card">
-        <i class="fas fa-teeth"></i>
-        <h3>Cosmetic Dentistry</h3>
-        <p>Veneers, whitening, and smile makeovers</p>
-        <div class="price">From 8,000 KES</div>
-      </div>
-      <div class="service-card">
-        <i class="fas fa-tooth"></i>
-        <h3>Dental Implants</h3>
-        <p>Permanent tooth replacement solutions</p>
-        <div class="price">From 45,000 KES</div>
-      </div>
-      <div class="service-card">
-        <i class="fas fa-braces"></i>
-        <h3>Orthodontics</h3>
-        <p>Braces & Invisalign for all ages</p>
-        <div class="price">From 80,000 KES</div>
-      </div>
-      <div class="service-card">
-        <i class="fas fa-shield-alt"></i>
-        <h3>Preventive Care</h3>
-        <p>Cleanings, sealants & fluoride treatments</p>
-        <div class="price">From 2,000 KES</div>
-      </div>
-      <div class="service-card">
-        <i class="fas fa-hospital"></i>
-        <h3>Oral Surgery</h3>
-        <p>Wisdom teeth & complex extractions</p>
-        <div class="price">From 8,000 KES</div>
-      </div>
-      <div class="service-card">
-        <i class="fas fa-clock"></i>
-        <h3>Emergency Care</h3>
-        <p>24/7 emergency dental services</p>
-        <div class="price">From 4,000 KES</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Assessment Tool Section -->
+  <!-- Assessment Section -->
   <section id="assessment" class="assessment">
     <div class="assessment-container">
       <div class="assessment-box">
-        <h2><i class="fas fa-stethoscope"></i> Smart Dental Assessment</h2>
-        <p style="text-align: center; margin-bottom: 2rem;">Describe your dental concern and get an instant preliminary assessment</p>
+        <h2 style="text-align: center; margin-bottom: 1rem;">
+          <i class="fas fa-stethoscope"></i> Smart Dental Assessment
+        </h2>
+        <p style="text-align: center; margin-bottom: 2rem;">Describe your dental concern for an instant preliminary assessment</p>
         
         <div class="input-group">
-          <label>What's bothering you? <i class="fas fa-comment-medical"></i></label>
-          <textarea id="symptomInput" placeholder="Example: I have a severe toothache on my lower right jaw that's been keeping me awake for 3 days. I have Jubilee insurance and a budget of around 15,000 KES."></textarea>
+          <label>What's bothering you?</label>
+          <textarea id="symptomInput" placeholder="Example: I have severe tooth pain on my lower right jaw for 3 days. I have Jubilee insurance and budget around 15,000 KES."></textarea>
         </div>
         
-        <button class="analyze-btn" onclick="analyzeSymptoms()">
+        <button class="analyze-btn" id="analyzeBtn" onclick="analyzeSymptoms()">
           <i class="fas fa-search"></i> Analyze My Symptoms
         </button>
+        
+        <div id="errorMessage" class="error-message"></div>
         
         <div class="loading" id="loadingIndicator">
           <div class="spinner"></div>
@@ -738,415 +336,318 @@
         </div>
         
         <div class="result-card" id="resultCard">
-          <div id="qualificationBadge"></div>
-          
           <div class="result-item">
-            <span><i class="fas fa-diagnoses"></i> Identified Issue:</span>
+            <span><i class="fas fa-diagnoses"></i> Issue:</span>
             <span id="diagnosisIssue"></span>
           </div>
           
           <div class="result-item">
-            <span><i class="fas fa-procedures"></i> Recommended Treatment:</span>
+            <span><i class="fas fa-procedures"></i> Treatment:</span>
             <span id="diagnosisTreatment"></span>
           </div>
           
           <div class="result-item">
-            <span><i class="fas fa-tag"></i> Estimated Cost:</span>
+            <span><i class="fas fa-tag"></i> Cost:</span>
             <span id="diagnosisPrice"></span>
           </div>
           
           <div class="result-item">
-            <span><i class="fas fa-shield-alt"></i> Insurance Detected:</span>
+            <span><i class="fas fa-shield-alt"></i> Insurance:</span>
             <span id="diagnosisInsurance"></span>
           </div>
           
           <div class="result-item">
-            <span><i class="fas fa-exclamation-triangle"></i> Urgency Level:</span>
+            <span><i class="fas fa-exclamation-triangle"></i> Urgency:</span>
             <span id="diagnosisUrgency"></span>
           </div>
           
           <div class="result-item">
-            <span><i class="fas fa-chart-line"></i> Qualification Score:</span>
+            <span><i class="fas fa-chart-line"></i> Score:</span>
             <span id="qualificationScore"></span>
           </div>
           
           <a href="#" id="whatsappButton" class="whatsapp-link" target="_blank">
-            <i class="fab fa-whatsapp"></i> Continue Booking on WhatsApp
+            <i class="fab fa-whatsapp"></i> Continue on WhatsApp
           </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section id="about" class="about">
-    <div class="about-container">
-      <div class="about-content">
-        <h2>Excellence in Dental Care Since 2010</h2>
-        <p>At Supreme Smiles Avenue, we combine artistry with science to create beautiful, healthy smiles. Our state-of-the-art facility is equipped with the latest dental technology, and our team of specialists provides comprehensive care for patients of all ages.</p>
-        <p>We believe in personalized treatment plans, transparent pricing, and creating a comfortable, anxiety-free environment for every patient who walks through our doors.</p>
-        
-        <div class="about-stats">
-          <div class="stat-item">
-            <div class="stat-number">14+</div>
-            <div>Years Experience</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">15k+</div>
-            <div>Happy Patients</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">12</div>
-            <div>Expert Dentists</div>
+          
+          <div style="text-align: center; margin-top: 1rem;">
+            <a href="#" id="directWhatsappBtn" class="direct-whatsapp-btn" target="_blank">
+              <i class="fab fa-whatsapp"></i> Direct WhatsApp Contact
+            </a>
           </div>
         </div>
-      </div>
-      <div class="about-image">
-        <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=600" alt="Modern Dental Clinic" style="width: 100%; border-radius: 15px;">
-      </div>
-    </div>
-  </section>
-
-  <!-- Team Section -->
-  <section id="team" class="team">
-    <h2 class="section-title">Meet Our Specialists</h2>
-    <div class="team-grid">
-      <div class="team-card">
-        <div class="team-image">
-          <i class="fas fa-user-md"></i>
-        </div>
-        <div class="team-info">
-          <h3>Dr. Sarah Kimani</h3>
-          <p>Lead Dentist & Cosmetic Specialist</p>
-          <p><small>15+ years experience</small></p>
-        </div>
-      </div>
-      <div class="team-card">
-        <div class="team-image">
-          <i class="fas fa-user-md"></i>
-        </div>
-        <div class="team-info">
-          <h3>Dr. James Omondi</h3>
-          <p>Oral Surgeon & Implantologist</p>
-          <p><small>12+ years experience</small></p>
-        </div>
-      </div>
-      <div class="team-card">
-        <div class="team-image">
-          <i class="fas fa-user-md"></i>
-        </div>
-        <div class="team-info">
-          <h3>Dr. Aisha Mohammed</h3>
-          <p>Orthodontist</p>
-          <p><small>10+ years experience</small></p>
-        </div>
-      </div>
-      <div class="team-card">
-        <div class="team-image">
-          <i class="fas fa-user-md"></i>
-        </div>
-        <div class="team-info">
-          <h3>Dr. Peter Njoroge</h3>
-          <p>Pediatric Dentist</p>
-          <p><small>8+ years experience</small></p>
+        
+        <div class="debug-info" id="debugInfo">
+          <strong>Debug Information:</strong>
+          <pre id="debugContent" style="margin-top: 0.5rem; white-space: pre-wrap;"></pre>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- Testimonials Section -->
-  <section class="testimonials">
-    <h2 class="section-title">What Our Patients Say</h2>
-    <div class="testimonials-grid">
-      <div class="testimonial-card">
-        <div class="rating">
-          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-        </div>
-        <p class="testimonial-text">"The best dental experience I've ever had! Dr. Sarah is incredibly gentle and professional. My smile has never looked better!"</p>
-        <p class="testimonial-author">- Mary Wambui</p>
-      </div>
-      <div class="testimonial-card">
-        <div class="rating">
-          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-        </div>
-        <p class="testimonial-text">"I was terrified of dentists, but the team here made me feel so comfortable. My implant procedure was painless and the results are amazing!"</p>
-        <p class="testimonial-author">- John Mwangi</p>
-      </div>
-      <div class="testimonial-card">
-        <div class="rating">
-          <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-        </div>
-        <p class="testimonial-text">"My daughter's braces journey was smooth and the results are incredible. The payment plans made it very affordable for us."</p>
-        <p class="testimonial-author">- Grace Akinyi</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact" class="contact">
-    <div class="contact-container">
-      <div class="contact-info">
-        <h2 style="margin-bottom: 2rem;">Get In Touch</h2>
-        
-        <div class="contact-item">
-          <i class="fas fa-map-marker-alt"></i>
-          <span>Supreme Smiles Avenue, Westlands, Nairobi, Kenya</span>
-        </div>
-        
-        <div class="contact-item">
-          <i class="fas fa-phone"></i>
-          <span>+254 712 345 678</span>
-        </div>
-        
-        <div class="contact-item">
-          <i class="fab fa-whatsapp"></i>
-          <span>+254 712 345 678 (WhatsApp)</span>
-        </div>
-        
-        <div class="contact-item">
-          <i class="fas fa-envelope"></i>
-          <span>info@supremesmilesavenue.co.ke</span>
-        </div>
-        
-        <div class="contact-item">
-          <i class="fas fa-clock"></i>
-          <span>Mon - Sat: 8:00 AM - 7:00 PM<br>Sunday: Closed (Emergency Only)</span>
-        </div>
-        
-        <div style="margin-top: 2rem;">
-          <h3>Accepted Insurance:</h3>
-          <p style="margin-top: 1rem;">
-            <span class="insurance-badge">Jubilee</span>
-            <span class="insurance-badge">Britam</span>
-            <span class="insurance-badge">Cigna</span>
-            <span class="insurance-badge">NHIF</span>
-            <span class="insurance-badge">APA</span>
-            <span class="insurance-badge">Resolution Health</span>
-            <span class="insurance-badge">Madison</span>
-          </p>
-        </div>
-      </div>
-      
-      <div class="map-placeholder">
-        <div style="text-align: center;">
-          <i class="fas fa-map-marked-alt" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-          <h3>Visit Our Clinic</h3>
-          <p>Conveniently located in Westlands, Nairobi</p>
-          <p style="margin-top: 1rem;">Free parking available</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section">
-        <h3>Supreme Smiles Avenue</h3>
-        <p>Your trusted partner for exceptional dental care in Nairobi.</p>
-        <div class="social-links">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        </div>
-      </div>
-      
-      <div class="footer-section">
-        <h3>Quick Links</h3>
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#assessment">Assessment Tool</a></li>
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-section">
-        <h3>Our Services</h3>
-        <ul>
-          <li><a href="#services">Cosmetic Dentistry</a></li>
-          <li><a href="#services">Dental Implants</a></li>
-          <li><a href="#services">Orthodontics</a></li>
-          <li><a href="#services">Emergency Care</a></li>
-          <li><a href="#services">Preventive Care</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-section">
-        <h3>Newsletter</h3>
-        <p>Subscribe for oral health tips and special offers</p>
-        <input type="email" placeholder="Your email" style="padding: 0.5rem; width: 100%; margin-top: 1rem; border: none; border-radius: 5px;">
-        <button style="margin-top: 0.5rem; padding: 0.5rem 1rem; background: #764ba2; color: white; border: none; border-radius: 5px; cursor: pointer;">Subscribe</button>
-      </div>
-    </div>
-    
-    <div class="footer-bottom">
-      <p>&copy; 2024 Supreme Smiles Avenue Dental Centre. All rights reserved.</p>
-    </div>
-  </footer>
 
   <script>
-    // Mobile menu toggle
-    function toggleMenu() {
-      document.getElementById('navMenu').classList.toggle('active');
-    }
-
-    // Smooth scroll for navigation
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-          document.getElementById('navMenu').classList.remove('active');
-        }
-      });
-    });
-
-    // API Configuration
+    // CONFIGURATION - UPDATE THIS WITH YOUR RENDER URL
     const API_URL = 'https://dental-ai-backend-n0ua.onrender.com';
+    const WHATSAPP_NUMBER = '254712345678'; // CHANGE THIS to your WhatsApp number
     
-    // Analyze Symptoms Function
+    let isApiConnected = false;
+    
+    // Test API Connection
+    async function testConnection() {
+      const statusDiv = document.getElementById('connectionStatus');
+      
+      try {
+        statusDiv.className = 'connection-status status-checking';
+        statusDiv.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Testing connection...';
+        
+        console.log('Testing connection to:', API_URL);
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch(`${API_URL}/health`, {
+          method: 'GET',
+          signal: controller.signal,
+          headers: {
+            'Accept': 'application/json',
+          }
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log('✅ API Connected:', data);
+          
+          isApiConnected = true;
+          statusDiv.className = 'connection-status status-online';
+          statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Connected to assessment service';
+          
+          // Hide after 3 seconds
+          setTimeout(() => {
+            statusDiv.style.display = 'none';
+          }, 3000);
+          
+          return true;
+        } else {
+          throw new Error(`HTTP ${response.status}`);
+        }
+      } catch (error) {
+        console.error('❌ Connection failed:', error);
+        
+        isApiConnected = false;
+        statusDiv.className = 'connection-status status-offline';
+        
+        if (error.name === 'AbortError') {
+          statusDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Connection timeout - using offline mode';
+        } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+          statusDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Cannot reach server - CORS or network issue';
+        } else {
+          statusDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Connection issue - direct WhatsApp available';
+        }
+        
+        return false;
+      }
+    }
+    
+    // Analyze Symptoms
     async function analyzeSymptoms() {
       const messageInput = document.getElementById('symptomInput');
       const message = messageInput.value.trim();
+      const analyzeBtn = document.getElementById('analyzeBtn');
+      const errorDiv = document.getElementById('errorMessage');
+      
+      // Reset
+      errorDiv.classList.remove('show');
       
       if (!message) {
-        alert('Please describe your dental concern in detail');
+        errorDiv.textContent = 'Please describe your dental concern';
+        errorDiv.classList.add('show');
         return;
       }
       
       if (message.length < 10) {
-        alert('Please provide more details about your symptoms for an accurate assessment');
+        errorDiv.textContent = 'Please provide more details for an accurate assessment';
+        errorDiv.classList.add('show');
         return;
       }
       
       // Show loading
+      analyzeBtn.disabled = true;
       document.getElementById('loadingIndicator').classList.add('show');
       document.getElementById('resultCard').classList.remove('show');
+      document.getElementById('debugInfo').classList.remove('show');
       
       try {
-        console.log('Sending request to:', `${API_URL}/analyze`);
+        console.log('📤 Sending analysis request...');
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
         
         const response = await fetch(`${API_URL}/analyze`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
           },
-          body: JSON.stringify({ message: message })
+          body: JSON.stringify({ message: message }),
+          signal: controller.signal
         });
         
+        clearTimeout(timeoutId);
+        
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`Server error: ${response.status}`);
         }
         
         const data = await response.json();
-        console.log('Response received:', data);
+        console.log('✅ Analysis complete:', data);
         
-        // Display results
         displayResults(data);
         
       } catch (error) {
-        console.error('Error:', error);
-        alert('Unable to connect to the assessment service. Please try again or contact us directly via WhatsApp.');
+        console.error('❌ Analysis failed:', error);
         
-        // Fallback: Direct WhatsApp contact
-        const whatsappFallback = `https://wa.me/254712345678?text=${encodeURIComponent('Hello Supreme Smiles Avenue, I need assistance with: ' + message)}`;
-        window.open(whatsappFallback, '_blank');
+        let errorMessage = 'Unable to connect to assessment service. ';
+        
+        if (error.name === 'AbortError') {
+          errorMessage += 'Request timed out.';
+        } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+          errorMessage += 'Network error - please check your connection.';
+        } else {
+          errorMessage += error.message;
+        }
+        
+        errorDiv.textContent = errorMessage + ' You can still contact us directly via WhatsApp.';
+        errorDiv.classList.add('show');
+        
+        // Show debug info
+        showDebugInfo({
+          error: error.message,
+          apiUrl: API_URL,
+          timestamp: new Date().toISOString(),
+          suggestion: 'Try direct WhatsApp contact below'
+        });
+        
+        // Still show a result with direct WhatsApp option
+        displayFallbackResults(message);
         
       } finally {
+        analyzeBtn.disabled = false;
         document.getElementById('loadingIndicator').classList.remove('show');
       }
     }
     
     // Display Results
     function displayResults(data) {
-      // Update diagnosis
       document.getElementById('diagnosisIssue').textContent = data.issue || 'General Consultation';
       document.getElementById('diagnosisTreatment').textContent = data.treatment || 'Dental Examination';
       document.getElementById('diagnosisPrice').textContent = data.priceDisplay || '1,000 - 3,000 KES';
       document.getElementById('diagnosisInsurance').textContent = data.insurance || 'Not specified';
       
-      // Update urgency with styling
       const urgencyElement = document.getElementById('diagnosisUrgency');
       urgencyElement.textContent = (data.urgency || 'low').toUpperCase();
       urgencyElement.className = `urgency-badge urgency-${data.urgency || 'low'}`;
       
-      // Update qualification score
-      const score = data.clientScore || { percentage: 50, isQualified: false };
+      const score = data.clientScore || { percentage: 50 };
       document.getElementById('qualificationScore').textContent = `${score.percentage || 0}%`;
       
-      // Show qualification badge
-      const badgeElement = document.getElementById('qualificationBadge');
-      if (score.isQualified) {
-        badgeElement.innerHTML = '<div class="qualification-badge qualified"><i class="fas fa-check-circle"></i> Qualified for Direct Booking</div>';
-      } else {
-        badgeElement.innerHTML = '<div class="qualification-badge not-qualified"><i class="fas fa-info-circle"></i> Please provide more details for faster booking</div>';
-      }
-      
-      // Handle WhatsApp button
+      // Setup WhatsApp buttons
+      const message = document.getElementById('symptomInput').value;
       const whatsappButton = document.getElementById('whatsappButton');
+      const directBtn = document.getElementById('directWhatsappBtn');
+      
       if (data.whatsapp) {
         whatsappButton.href = data.whatsapp;
-        whatsappButton.style.display = 'block';
       } else {
-        // Create a general inquiry WhatsApp link
-        const message = document.getElementById('symptomInput').value;
-        const generalInquiry = encodeURIComponent(
+        const fallbackMessage = encodeURIComponent(
           `Hello Supreme Smiles Avenue,\n\n` +
-          `I've completed the assessment and would like to schedule an appointment.\n\n` +
+          `I've completed your online assessment and would like to schedule an appointment.\n\n` +
           `My concern: ${message}\n\n` +
-          `Assessment Result: ${data.issue}\n` +
-          `Recommended Treatment: ${data.treatment}\n\n` +
-          `I'm interested in booking a consultation.`
+          `Assessment indicated: ${data.issue}\n` +
+          `Recommended: ${data.treatment}\n\n` +
+          `I'd like to book a consultation.`
         );
-        whatsappButton.href = `https://wa.me/254712345678?text=${generalInquiry}`;
-        whatsappButton.style.display = 'block';
+        whatsappButton.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${fallbackMessage}`;
       }
       
-      // Show result card
+      // Direct WhatsApp button
+      const directMessage = encodeURIComponent(
+        `Hello Supreme Smiles Avenue,\n\n` +
+        `I need dental assistance with: ${message}`
+      );
+      directBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${directMessage}`;
+      
       document.getElementById('resultCard').classList.add('show');
       
-      // Scroll to results
-      document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-    
-    // Test API connection on page load
-    async function testAPIConnection() {
-      try {
-        const response = await fetch(`${API_URL}/health`);
-        if (response.ok) {
-          const data = await response.json();
-          console.log('✅ API Connected:', data);
-        } else {
-          console.warn('⚠️ API health check failed');
-        }
-      } catch (error) {
-        console.warn('⚠️ Cannot reach API server. Check CORS settings.');
+      // Show debug info if available
+      if (data.clientScore) {
+        showDebugInfo({
+          qualification: data.clientScore,
+          insurance: data.insurance,
+          budget: data.budget,
+          urgency: data.urgency
+        });
       }
     }
     
-    // Run on page load
-    window.addEventListener('load', () => {
-      testAPIConnection();
+    // Fallback Results
+    function displayFallbackResults(message) {
+      const fallbackData = {
+        issue: "Unable to analyze - Please contact us directly",
+        treatment: "Consultation Recommended",
+        priceDisplay: "1,000 - 3,000 KES",
+        insurance: "Please mention when you call",
+        urgency: "medium",
+        clientScore: { percentage: 0 }
+      };
       
-      // Add example suggestion for empty textarea
+      displayResults(fallbackData);
+    }
+    
+    // Show Debug Info
+    function showDebugInfo(info) {
+      const debugContent = document.getElementById('debugContent');
+      debugContent.textContent = JSON.stringify(info, null, 2);
+      document.getElementById('debugInfo').classList.add('show');
+    }
+    
+    // Direct WhatsApp function
+    function contactWhatsApp() {
+      const message = document.getElementById('symptomInput').value || 'General inquiry';
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hello Supreme Smiles Avenue, I need dental assistance with: ' + message)}`;
+      window.open(whatsappUrl, '_blank');
+    }
+    
+    // Initialize on page load
+    window.addEventListener('load', () => {
+      testConnection();
+      
+      // Add example on focus
       const textarea = document.getElementById('symptomInput');
       textarea.addEventListener('focus', function() {
         if (!this.value) {
-          this.placeholder = 'Describe your symptoms in detail...';
+          this.placeholder = 'Describe your symptoms in detail (pain level, duration, location, insurance, budget)...';
         }
       });
+      
+      // Keyboard shortcut
+      textarea.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          analyzeSymptoms();
+        }
+      });
+      
+      // Periodically check connection
+      setInterval(testConnection, 30000);
     });
     
-    // Allow Enter key to submit (Ctrl/Cmd + Enter)
-    document.getElementById('symptomInput').addEventListener('keydown', function(e) {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-        analyzeSymptoms();
-      }
-    });
+    // Export for debugging
+    window.debugAPI = {
+      testConnection,
+      apiUrl: API_URL,
+      status: () => isApiConnected
+    };
   </script>
 </body>
 </html>
